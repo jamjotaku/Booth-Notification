@@ -19,12 +19,14 @@ async function main() {
     console.error('Error: config/shops.json not found.');
     process.exit(1);
   }
-  const shops: ShopConfig[] = JSON.parse(fs.readFileSync(SHOPS_CONFIG_PATH, 'utf-8'));
+  const shopsStr = fs.readFileSync(SHOPS_CONFIG_PATH, 'utf-8').replace(/^\uFEFF/, '');
+  const shops: ShopConfig[] = JSON.parse(shopsStr);
 
   // Load cache
   let cache: CacheData = { lastItemIds: {} };
   if (fs.existsSync(CACHE_FILE_PATH)) {
-    cache = JSON.parse(fs.readFileSync(CACHE_FILE_PATH, 'utf-8'));
+    const cacheStr = fs.readFileSync(CACHE_FILE_PATH, 'utf-8').replace(/^\uFEFF/, '');
+    cache = JSON.parse(cacheStr);
   }
 
   for (const shop of shops) {
